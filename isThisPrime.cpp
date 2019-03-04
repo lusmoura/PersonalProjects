@@ -2,6 +2,7 @@
 * 	-Just a game to learn the prime numbers
 */
 
+#include <stdlib.h>
 #include <iostream>
 #include <vector>
 #include <ctime>
@@ -76,6 +77,7 @@ int main(int argc, char* argv[]){
 	int isComposite[total];
 
 	bool playing = true;
+	bool timeUp = false, wrongAns = false;
 	
 	time_t time1, time2;
 
@@ -92,8 +94,9 @@ int main(int argc, char* argv[]){
 	// random numbers are generated, if it takes too long for the
 	// player to type the answer or it's wrong, the game is over
 	while(playing) {
-		bool timeUp = false, wrongAns = false;
 		int num, rightAns = 0, min = 1, max = 50;
+		timeUp = false;
+		wrongAns = false;
 		
 		while(max < total) {
 			num = (rand() % (max - min + 1)) + min;
@@ -114,17 +117,20 @@ int main(int argc, char* argv[]){
 			max += (50 * (rightAns % (12 - level) == 0)); //the greater the level, the faster the max increases
 		}
 
-		if(timeUp && isComposite[num]) printf("\nTime's up =(\n%d was composite, and could be written as: %d*%d\nYour score was: %d", num, isComposite[num], num/isComposite[num], rightAns);
-		else if(timeUp && !isComposite[num]) printf("\nTime's up =(\n%d is prime\nYour score was: %d", num, rightAns);
-		else if(wrongAns && isComposite[num]) printf("\nWrong answer =(\n%d can be written as %d*%d\nYour score was: %d", num, isComposite[num], num/isComposite[num], rightAns);
-		else if(wrongAns && !isComposite[num]) printf("\nWrong answer =(\n%d is prime\nYour score was: %d", num, rightAns);
-		else printf("Congrats, you are a prime master \\o/\n");
+		if(timeUp) printf("\nTime's up =(\n");
+		else if(wrongAns) printf("\nWrong answer =(\n");
+		else printf("You are a prime master!\n");
+		
+		if(!isComposite[num] && (timeUp || wrongAns)) printf("%d is prime\n", num);
+		else if(isComposite[num] && (timeUp || wrongAns)) printf("%d is composite and can be written as %d*%d\n", num, isComposite[num], num/isComposite[num]);
+
+		printf("Your score was: %d\n", rightAns);
 
 		endGame(&ans);
 		if(ans == 'm') menu(&yes, &no, &level);
 		else if(ans == 'q') playing = false; 
 	}
 	
-	system("clear");
+	if(timeUp || wrongAns) system("clear");
 	return 0;
 }
