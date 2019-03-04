@@ -40,6 +40,35 @@ vector<int> sieve(int max, int* isComposite) {
 	return prime;
 }
 
+/*EndGame
+* Just print the options when you loose
+*/
+void endGame(char* ans) {
+	printf("\n\n\t----------\n");
+	printf("To go back to the menu, type \"m\"\n");
+	printf("To Play Again, type \"a\"\n");
+	printf("To quit, type \"q\"\n");
+	printf("\t----------\n");
+	scanf(" %c", ans);
+}
+
+/*Menu
+* Just print the menu options
+*/
+void menu(char* yes, char* no, int* level){
+	printf("=============== Is this prime ==============\n");
+	printf("You just got to tell us if a number is prime\n");
+	printf("Remember: you have to get it right and to be\n");
+	printf("         fast enough. Good luck \\o/        \n");
+
+	printf("\nChoose a key to represent \"yes\":\n");
+	scanf(" %c", yes);
+	printf("Now Choose a key to represent \"no\"\n");
+	scanf(" %c", no);
+	printf("And choose a dificulty level (1-9)\n");
+	scanf("%d", level);
+}
+
 int main(int argc, char* argv[]){
 	system("clear");
 
@@ -54,17 +83,7 @@ int main(int argc, char* argv[]){
 
 	vector<int> prime = sieve(total, isComposite);
 
-	printf("=============== Is this prime ==============\n");
-	printf("You just got to tell us if a number is prime\n");
-	printf("Remember: you have to get it right and to be\n");
-	printf("         fast enough. Good luck \\o/        \n");
-
-	printf("\nChoose a key to represent \"yes\":\n");
-	scanf(" %c", &yes);
-	printf("Now Choose a key to represent \"no\"\n");
-	scanf(" %c", &no);
-	printf("And choose a dificulty level (1-9)\n");
-	scanf("%d", &level);
+	menu(&yes, &no, &level);
 
 	do{
 		printf("\nAll set... Ready to play?\n");
@@ -95,15 +114,15 @@ int main(int argc, char* argv[]){
 			max += (50 * (rightAns % (12 - level) == 0)); //the greater the level, the faster the max increases
 		}
 
-		if(timeUp) printf("\nTime's up =(\nYour score was: %d", rightAns);
+		if(timeUp && isComposite[num]) printf("\nTime's up =(\n%d was composite, and could be written as: %d*%d\nYour score was: %d", num, isComposite[num], num/isComposite[num], rightAns);
+		else if(timeUp && !isComposite[num]) printf("\nTime's up =(\n%d is prime\nYour score was: %d", num, rightAns);
 		else if(wrongAns && isComposite[num]) printf("\nWrong answer =(\n%d can be written as %d*%d\nYour score was: %d", num, isComposite[num], num/isComposite[num], rightAns);
 		else if(wrongAns && !isComposite[num]) printf("\nWrong answer =(\n%d is prime\nYour score was: %d", num, rightAns);
 		else printf("Congrats, you are a prime master \\o/\n");
 
-		printf("\n\nPlay again?\n");
-		scanf(" %c", &ans);
-		
-		if(ans != yes) playing = false;
+		endGame(&ans);
+		if(ans == 'm') menu(&yes, &no, &level);
+		else if(ans == 'q') playing = false; 
 	}
 	
 	system("clear");
