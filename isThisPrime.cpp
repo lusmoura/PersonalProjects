@@ -131,6 +131,6 @@ int main(int argc, char* argv[]){
 		else if(ans == 'q') playing = false; 
 	}
 	
-	if(timeUp || wrongAns) system("clear");
+	system("clear");
 	return 0;
 }
