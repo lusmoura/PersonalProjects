@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<body>
+    <p id='some-paragraph'>This is a paragraph.</p>
+  
+  <style>
+    p {
+        font-size: 20px;
+        color: blue;
+    }
+
+  </style>
+
+  <script>
+    var p = document.getElementById('some-paragraph');
+    p.addEventListener('click', function(event) {
+    p.innerHTML = 'You clicked it!';
+    });
+
+  </script>
+</body>
+</html>
